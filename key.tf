@@ -1,0 +1,13 @@
+resource "aws_key_pair" "keypair" {
+    key_name        = "project_access_key"
+    public_key      = tls_private_key.rsa.public_key_openssh
+}
+resource "local_file" "instance_key_file" {
+    content         = tls_private_key.rsa.private_key_pem
+    filename        = "project_access_key.pem"
+    file_permission = "0400"
+}
+resource "tls_private_key" "rsa" {
+    algorithm       = "RSA"
+    rsa_bits        = 4096
+}
